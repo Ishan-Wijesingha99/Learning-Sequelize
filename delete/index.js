@@ -1,6 +1,6 @@
 
 // getting modules
-const {Sequelize, DataTypes} = require('sequelize') // need DataTypes to define model
+const {Sequelize, DataTypes} = require('sequelize')
 const mysql = require('mysql2')
 
 // set up connection using Sequelize constructor
@@ -47,28 +47,36 @@ const Book = sequelize.define('book', {
 
 
 
-// to insert a single row into a model (table)
 Book.sync({force: true})
 .then(() => {
-    // just insert something for every column
-   return Book.create({
+
+    return Book.create({
     title: 'Crime and Punishment',
     author: 'Fyodor Dostoevsky',
     isPaperback: true
-   }) 
+   })
+
 })
 .then((data) => {
-    console.log('row added to books table')
-    // if you want to see what was inserted into the table, use the following
+
+    // this will destroy the ROW you just inserted, because data is the row in this case
+    return data.destroy()
+
+    // you can also destroy all rows in the Book model by calling destroy() on Book instead
+    // use truncate: true to destroy all rows in model/table
+    // the table will itself still exist
+    Book.destroy({truncate: true})
+
+})
+.then((data) => {
+    console.log('row destroyed')
     console.log(data.toJSON())
 })
 .catch((err) => console.log(err))
 
 
 
-// if you want to insert multiple rows at once, use bulkCreate()
-// this takes an array of objects rather than a single object
-// the bad thing about bulkCreate is that it will insert rows in the table regardless of whether or not they satisfy the validation criteria (we can change this though)
+// can also destroy a particular row like this
 Book.sync({force: true})
 .then(() => {
    return Book.bulkCreate([
@@ -89,9 +97,18 @@ Book.sync({force: true})
         },
     ]) 
 })
-.then(data => {
-    // because data is an array now, not a single object, we must loop over the array and use .toJSON() for each object 
-    data.forEach(object => console.log(object.toJSON()))
+.then(() => {
+    // like this
+    // destroy() takes an object as an argument, that object has the where: property
+    // for the where: property, you put in one of the column entrees of the row you want to delete
+    // sequelize will know to delete 
+    // {
+    //     title: 'Animal Farm',
+    //     author: 'George Orwell',
+    //     isPaperback: true
+    // }
+    return Book.destroy(
+        {where: {title: 'Animal farm'}}
+    )
 })
 .catch(err => console.log(err))
-
