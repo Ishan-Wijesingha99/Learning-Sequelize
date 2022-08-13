@@ -113,9 +113,9 @@ Book.sync({force: true})
 
 
     // findOne()
+    // whatever is specified in the where: clause, the first row that matches that condition will be returned
+    const object2 = await Book.findOne({where: {author: 'William James'}}).then(data => data.toJSON())
+    console.log(object2)
 
-
-
-    
 })
 .catch(err => console.log(err))
