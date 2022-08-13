@@ -49,36 +49,6 @@ const Book = sequelize.define('book', {
 
 Book.sync({force: true})
 .then(() => {
-
-    return Book.create({
-    title: 'Crime and Punishment',
-    author: 'Fyodor Dostoevsky',
-    isPaperback: true
-   })
-
-})
-.then((data) => {
-
-    // this will destroy the ROW you just inserted, because data is the row in this case
-    return data.destroy()
-
-    // you can also destroy all rows in the Book model by calling destroy() on Book instead
-    // use truncate: true to destroy all rows in model/table
-    // the table will itself still exist
-    Book.destroy({truncate: true})
-
-})
-.then((data) => {
-    console.log('row destroyed')
-    console.log(data.toJSON())
-})
-.catch((err) => console.log(err))
-
-
-
-// can also destroy a particular row like this
-Book.sync({force: true})
-.then(() => {
    return Book.bulkCreate([
         {
             title: 'Bible',
@@ -98,17 +68,11 @@ Book.sync({force: true})
     ]) 
 })
 .then(() => {
-    // like this
-    // destroy() takes an object as an argument, that object has the where: property
-    // for the where: property, you put in one of the column entrees of the row you want to delete
-    // sequelize will know to delete 
-    // {
-    //     title: 'Animal Farm',
-    //     author: 'George Orwell',
-    //     isPaperback: true
-    // }
-    return Book.destroy(
-        {where: {title: 'Animal farm'}}
-    )
+    // let's update the table here once the table rows have been inserted above
+    // first argument is the column value you want to update
+    // second argument is where you want this to be updated. So you need to specify another column value for that same row you want to update
+    // can specify a condition as well, like where age is greater than or less than 21
+    return Book.update({isPaperback: false}, {where: {author: 'William James'}})
+
 })
 .catch(err => console.log(err))
