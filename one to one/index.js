@@ -1,6 +1,6 @@
 
 // getting modules
-const {Sequelize, DataTypes} = require('sequelize') // need DataTypes to define model
+const {Sequelize, DataTypes, hasOne, belongsTo} = require('sequelize')
 const mysql = require('mysql2')
 
 // set up connection using Sequelize constructor
