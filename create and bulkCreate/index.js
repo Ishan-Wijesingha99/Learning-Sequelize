@@ -55,7 +55,7 @@ Book.sync({force: true})
     title: 'Crime and Punishment',
     author: 'Fyodor Dostoevsky',
     isPaperback: true
-   })
+    })
 })
 .then((data) => {
     console.log('row added to books table')
