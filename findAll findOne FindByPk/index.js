@@ -119,3 +119,7 @@ Book.sync({force: true})
 
 })
 .catch(err => console.log(err))
+
+
+// sometimes when we try to store a row in a model as a variable or just log it to the console, it comes with a lot of additional properties, to get just the row itself, we use .get({plain: true})
+// const dataWeWant = entireData.get({plain: true})
